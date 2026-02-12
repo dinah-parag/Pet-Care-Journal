@@ -1,7 +1,29 @@
-<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
-  <h3>✨ Novo Cadastro ✨</h3>
-  <input type="text" [(ngModel)]="novoPet.nome" placeholder="Nome do Pet" />
-  <input type="text" [(ngModel)]="novoPet.especie" placeholder="Espécie (ex: Gato)" />
-  <input type="number" [(ngModel)]="novoPet.idade" placeholder="Idade" />
-  <button (click)="salvar()">Adicionar ao Diário</button>
+<div class="card-journal">
+  <h3>📓 Nova Entrada no Diário</h3>
+  
+  <label>Para qual pet é esta atualização?</label>
+  <select [(ngModel)]="petSelecionadoId">
+    <option value="" disabled selected>Escolha um gato...</option>
+    <option *ngFor="let pet of listaDePets" [value]="pet.id">{{ pet.nome }}</option>
+  </select>
+
+  <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+  <div *ngIf="petSelecionadoId">
+    <label>Categoria:</label>
+    <select [(ngModel)]="novaEntrada.categoria">
+      <option value="Medicação">💊 Medicação</option>
+      <option value="Banho">🧼 Banho</option>
+      <option value="Alimentação">🍽️ Alimentação</option>
+      <option value="Customizado">✨ Outro</option>
+    </select>
+
+    <input type="text" [(ngModel)]="novaEntrada.titulo" placeholder="Título (ex: Vacina, Cortou a unha)" />
+    <textarea [(ngModel)]="novaEntrada.comentario" placeholder="Conte o que aconteceu..."></textarea>
+    
+    <label>Próxima vez (opcional):</label>
+    <input type="date" [(ngModel)]="novaEntrada.proximaData" />
+
+    <button (click)="salvarNoDiario()">Registrar no Diário</button>
+  </div>
 </div>
