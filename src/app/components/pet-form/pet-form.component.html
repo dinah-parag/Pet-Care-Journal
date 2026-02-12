@@ -1,0 +1,7 @@
+<div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+  <h3>✨ Novo Cadastro ✨</h3>
+  <input type="text" [(ngModel)]="novoPet.nome" placeholder="Nome do Pet" />
+  <input type="text" [(ngModel)]="novoPet.especie" placeholder="Espécie (ex: Gato)" />
+  <input type="number" [(ngModel)]="novoPet.idade" placeholder="Idade" />
+  <button (click)="salvar()">Adicionar ao Diário</button>
+</div>
