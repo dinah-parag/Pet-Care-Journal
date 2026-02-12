@@ -12,6 +12,13 @@ import { Pet } from '../../models/pet.model';
 })
 export class PetListComponent implements OnInit {
   lista: Pet[] = [];
+
   constructor(private petService: PetService) {}
-  ngOnInit() { this.lista = this.petService.getPets(); }
+
+  ngOnInit() {
+    // Inscreve-se para receber atualizações automáticas
+    this.petService.pets$.subscribe(dados => {
+      this.lista = dados;
+    });
+  }
 }
