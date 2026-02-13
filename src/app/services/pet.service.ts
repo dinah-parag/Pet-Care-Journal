@@ -1,75 +1,69 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, tap } from 'rxjs';
 import { Pet, PetEntry } from '../models/pet.model';
 
 @Injectable({ providedIn: 'root' })
 export class PetService {
-  private pets: Pet[] = [
-    { id: 1, nome: 'Melissa', especie: 'Gato', idade: 2, sexo: 'Fêmea', diario: [] },
-    { id: 2, nome: 'Nibs', especie: 'Gato', idade: 6, sexo: 'Fêmea', diario: [] }
-  ];
+  private apiUrl = 'https://pet-backend-b5kh.onrender.com';
 
-  private petsSubject = new BehaviorSubject<Pet[]>(this.pets);
+  private pets: Pet[] = [];
+  private petsSubject = new BehaviorSubject<Pet[]>([]);
   pets$ = this.petsSubject.asObservable();
 
   private petParaEditarSubject = new BehaviorSubject<Pet | null>(null);
   petParaEditar$ = this.petParaEditarSubject.asObservable();
 
-  setPetParaEditar(pet: Pet) {
-    this.petParaEditarSubject.next(pet);
+  constructor(private http: HttpClient) {
+    this.carregarPetsDoServidor(); // <-- Corrigido aqui (sem o espaço!)
   }
 
-  limparPetParaEditar() {
-    this.petParaEditarSubject.next(null);
-}
-
-  getPets() { return this.pets; }
+  carregarPetsDoServidor() {
+    this.http.get<Pet[]>(`${this.apiUrl}/pets`).subscribe({
+      next: (dados) => {
+        this.pets = dados;
+        this.petsSubject.next([...this.pets]);
+      },
+      error: (err) => console.error('Erro ao buscar pets:', err)
+    });
+  }
 
   addPet(pet: Pet) {
-    this.pets.push(pet);
-    this.petsSubject.next([...this.pets])
-    this.salvarNoDisco();
-}
+    return this.http.post(`${this.apiUrl}/pets`, pet).pipe(
+      tap(() => this.carregarPetsDoServidor())
+    );
+  }
 
   excluirPet(id: number) {
-    this.pets = this.pets.filter(p => p.id !== id);
-    this.petsSubject.next([...this.pets]);
+    this.http.delete(`${this.apiUrl}/pets/${id}`).subscribe({
+      next: () => this.carregarPetsDoServidor(),
+      error: (err) => console.error('Erro ao excluir pet:', err)
+    });
   }
 
   atualizarPet(petAtualizado: Pet) {
-    const index = this.pets.findIndex(p => p.id === petAtualizado.id);
-    if (index !== -1) {
-      this.pets[index] = { ...petAtualizado, diario: this.pets[index].diario };
-      this.petsSubject.next([...this.pets]);
-    }
+    return this.http.post(`${this.apiUrl}/pets`, petAtualizado).pipe(
+      tap(() => this.carregarPetsDoServidor())
+    );
   }
 
   adicionarEvento(petId: number, evento: PetEntry) {
     const pet = this.pets.find(p => p.id === petId);
     if (pet) {
-      pet.diario.unshift(evento);
-      this.petsSubject.next([...this.pets]);
+      const petAtualizado = { ...pet, diario: [evento, ...pet.diario] };
+      this.atualizarPet(petAtualizado).subscribe();
     }
   }
 
-excluirEvento(petId: number, eventoId: string) {
-  const pet = this.pets.find(p => p.id === petId);
-  if (pet) {
-    pet.diario = pet.diario.filter(e => e.id !== eventoId);
-    this.petsSubject.next([...this.pets]);
-    this.salvarNoDisco();
+  excluirEvento(petId: number, eventoId: string) {
+    const pet = this.pets.find(p => p.id === petId);
+    if (pet) {
+      const petAtualizado = { ...pet, diario: pet.diario.filter(e => e.id !== eventoId) };
+      this.atualizarPet(petAtualizado).subscribe();
+    }
   }
-}
 
-  constructor() {
-  const dadosSalvos = localStorage.getItem('pet_journal_data');
-  if (dadosSalvos) {
-    this.pets = JSON.parse(dadosSalvos);
-    this.petsSubject.next([...this.pets]);
-  }
-}
-
-private salvarNoDisco() {
-  localStorage.setItem('pet_journal_data', JSON.stringify(this.pets));
-}
+  setPetParaEditar(pet: Pet) { this.petParaEditarSubject.next(pet); }
+  limparPetParaEditar() { this.petParaEditarSubject.next(null); }
+  getPets() { return this.pets; }
 }
