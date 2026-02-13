@@ -27,8 +27,9 @@ export class PetService {
 
   addPet(pet: Pet) {
     this.pets.push(pet);
-    this.petsSubject.next([...this.pets]);
-  }
+    this.petsSubject.next([...this.pets])
+    this.salvarNoDisco();
+}
 
   excluirPet(id: number) {
     this.pets = this.pets.filter(p => p.id !== id);
@@ -51,11 +52,24 @@ export class PetService {
     }
   }
 
-  excluirEvento(petId: number, eventoId: string) {
-    const pet = this.pets.find(p => p.id === petId);
-    if (pet) {
-      pet.diario = pet.diario.filter(e => e.id !== eventoId);
-      this.petsSubject.next([...this.pets]);
-    }
+excluirEvento(petId: number, eventoId: string) {
+  const pet = this.pets.find(p => p.id === petId);
+  if (pet) {
+    pet.diario = pet.diario.filter(e => e.id !== eventoId);
+    this.petsSubject.next([...this.pets]);
+    this.salvarNoDisco();
   }
+}
+
+  constructor() {
+  const dadosSalvos = localStorage.getItem('pet_journal_data');
+  if (dadosSalvos) {
+    this.pets = JSON.parse(dadosSalvos);
+    this.petsSubject.next([...this.pets]);
+  }
+}
+
+private salvarNoDisco() {
+  localStorage.setItem('pet_journal_data', JSON.stringify(this.pets));
+}
 }
