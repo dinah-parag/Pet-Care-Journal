@@ -2,31 +2,47 @@
   <h2>📋 Histórico do Diário</h2>
 
   <div *ngFor="let pet of meusPets" class="pet-section">
+    
     <div class="pet-header">
-      <span class="pet-name">
-        <span *ngIf="pet.especie.toLowerCase() === 'gato'">🐈</span>
-        <span *ngIf="pet.especie.toLowerCase() === 'cachorro'">🐕</span>
-        {{ pet.nome }}
-      </span>
-      <div class="pet-meta">
-        <small>{{ pet.sexo }} • {{ pet.idade }} anos</small>
-        <button (click)="apagarPet(pet.id)" class="btn-delete-pet">🗑️</button>
-      </div>
-    </div>
-
-    <div *ngIf="pet.diario.length > 0; else empty">
-      <div *ngFor="let entrada of pet.diario" class="entry-card">
-        <div class="entry-header">
-          <span class="category-tag">{{ entrada.categoria }}</span>
-          <strong>{{ entrada.titulo }}</strong>
-          <button (click)="excluirRegistro(pet.id, entrada.id)" class="btn-mini-del">&times;</button>
+      
+      <div class="pet-identity">
+        <div class="avatar-container">
+          <img *ngIf="pet.imagemUrl; else ShowIcon" [src]="pet.imagemUrl" class="pet-avatar" alt="Foto do pet">
+          <ng-template #ShowIcon>
+            <span class="species-icon">
+              {{ pet.especie.toLowerCase() === 'gato' ? '🐈' : (pet.especie.toLowerCase() === 'cachorro' ? '🐕' : '🐾') }}
+            </span>
+          </ng-template>
         </div>
-        <p>{{ entrada.comentario }}</p>
+
+        <div class="pet-details">
+          <span class="pet-name">{{ pet.nome }}</span>
+          <small class="pet-meta">{{ pet.sexo }} • {{ pet.idade }} anos</small>
+        </div>
+      </div>
+
+      <div class="actions-container">
+        <button (click)="editarPet(pet)" class="btn-action btn-edit" title="Editar informações">✏️</button>
+        <button (click)="apagarPet(pet.id)" class="btn-action btn-delete" title="Excluir pet">🗑️</button>
       </div>
     </div>
 
-    <ng-template #empty>
-      <p>Nenhum registro para este pet.</p>
-    </ng-template>
-  </div>
-</div>
+    <div class="journal-entries">
+      <div *ngIf="pet.diario && pet.diario.length > 0; else emptyJournal">
+        <div *ngFor="let entrada of pet.diario" class="entry-card">
+          <div class="entry-header">
+            <span class="category-tag">{{ entrada.categoria }}</span>
+            <span class="entry-title">{{ entrada.titulo }}</span>
+            <button (click)="excluirRegistro(pet.id, entrada.id)" class="btn-mini-del" title="Excluir registro">&times;</button>
+          </div>
+          <p class="entry-comment">{{ entrada.comentario }}</p>
+          <small class="entry-date">{{ entrada.data | date:'dd/MM/yyyy HH:mm' }}</small>
+        </div>
+      </div>
+
+      <ng-template #emptyJournal>
+        <p class="empty-msg">Nenhum registro para este pet ainda.</p>
+      </ng-template>
+    </div>
+
+  </div> </div>

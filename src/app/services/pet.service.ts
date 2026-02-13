@@ -12,6 +12,17 @@ export class PetService {
   private petsSubject = new BehaviorSubject<Pet[]>(this.pets);
   pets$ = this.petsSubject.asObservable();
 
+  private petParaEditarSubject = new BehaviorSubject<Pet | null>(null);
+  petParaEditar$ = this.petParaEditarSubject.asObservable();
+
+  setPetParaEditar(pet: Pet) {
+    this.petParaEditarSubject.next(pet);
+  }
+
+  limparPetParaEditar() {
+    this.petParaEditarSubject.next(null);
+}
+
   getPets() { return this.pets; }
 
   addPet(pet: Pet) {
@@ -22,6 +33,14 @@ export class PetService {
   excluirPet(id: number) {
     this.pets = this.pets.filter(p => p.id !== id);
     this.petsSubject.next([...this.pets]);
+  }
+
+  atualizarPet(petAtualizado: Pet) {
+    const index = this.pets.findIndex(p => p.id === petAtualizado.id);
+    if (index !== -1) {
+      this.pets[index] = { ...petAtualizado, diario: this.pets[index].diario };
+      this.petsSubject.next([...this.pets]);
+    }
   }
 
   adicionarEvento(petId: number, evento: PetEntry) {

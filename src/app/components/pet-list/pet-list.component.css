@@ -15,79 +15,65 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #f8fafc;
-  padding-bottom: 10px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f1f5f9;
   margin-bottom: 15px;
 }
 
+.pet-identity {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Espaço entre foto e nome */
+}
+
+.avatar-container {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+}
+
+.pet-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.species-icon {
+  font-size: 1.8rem;
+}
+
+.pet-details {
+  display: flex;
+  flex-direction: column;
+}
+
 .pet-name {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #1e293b;
 }
 
-.entry-card {
-  position: relative;
-  padding-left: 20px;
-  border-left: 2px solid #6366f1; /* Linha da timeline */
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-}
-
-.entry-card::before {
-  content: '';
-  position: absolute;
-  left: -6px;
-  top: 0;
-  width: 10px;
-  height: 10px;
-  background: #6366f1;
-  border-radius: 50%;
-}
-
-.entry-header {
+.actions-container {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  font-weight: 600;
-  font-size: 0.9rem;
+  gap: 8px;
 }
 
-.category-tag {
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-
-.cat-med { background: #fee2e2; color: #991b1b; } /* Vermelho para medicação */
-.cat-banho { background: #e0f2fe; color: #075985; } /* Azul para banho */
-.cat-food { background: #fef3c7; color: #92400e; } /* Amarelo para comida */
-
-.comment {
-  font-size: 0.9rem;
-  color: #64748b;
-  margin: 5px 0;
-}
-
-.next-date {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #059669; /* Verde para lembretes futuros */
-}
-
-.btn-delete {
-  background: transparent;
-  color: #94a3b8;
+.btn-action {
+  background: #f1f5f9;
   border: none;
-  font-size: 1.2rem;
+  padding: 8px;
+  border-radius: 8px;
   cursor: pointer;
-  padding: 0 5px;
-  margin-left: auto; 
-  width: auto;
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
 
-.btn-delete:hover {
-  color: #c85858; /* Vermelho ao passar o mouse */
+.btn-action:hover {
+  background: #e2e8f0;
+  transform: scale(1.1);
 }

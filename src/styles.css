@@ -68,3 +68,27 @@ button {
   cursor: pointer;
   width: 100%;
 }
+
+.actions-container {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+}
+
+.btn-action:hover {
+    transform: scale(1.1);
+    background-color: #e2e8f0;
+}
+
+.btn-edit:hover { color: var(--primary); }
+.btn-delete-pet:hover { color: var(--danger); }

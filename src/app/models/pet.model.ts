@@ -7,11 +7,13 @@ export interface PetEntry {
   proximaData?: Date;
 }
 
+
 export interface Pet {
   id: number;
   nome: string;
   especie: string;
   idade: number;
   sexo: 'Macho' | 'Fêmea';
+  imagemUrl?: string;
   diario: PetEntry[];
 }

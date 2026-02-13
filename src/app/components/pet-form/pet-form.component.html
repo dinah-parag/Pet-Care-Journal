@@ -6,21 +6,39 @@
     <option value="novo">➕ ADICIONAR NOVO PET...</option>
   </select>
 
-  <div *ngIf="exibirFormNovoPet" class="sub-form">
-    <h4>📝 Novo Animal</h4>
-    <input [(ngModel)]="novoAnimal.nome" placeholder="Nome" />
-    <select [(ngModel)]="novoAnimal.especie">
-      <option value="Gato">Gato</option>
-      <option value="Cachorro">Cachorro</option>
-      <option value="Outro">Outro</option>
-    </select>
-    <input type="number" [(ngModel)]="novoAnimal.idade" placeholder="Idade" />
-    <select [(ngModel)]="novoAnimal.sexo">
-      <option value="Macho">Macho</option>
-      <option value="Fêmea">Fêmea</option>
-    </select>
-    <button (click)="salvarPet()">Cadastrar Animal</button>
+<div *ngIf="exibirFormNovoPet" class="sub-form">
+  <h4>📝 {{ modoEdicao ? 'Editar Animal' : 'Novo Animal' }}</h4>
+
+  <input [(ngModel)]="novoAnimal.nome" placeholder="Nome" />
+  <select [(ngModel)]="novoAnimal.especie">
+    <option value="Gato">Gato</option>
+    <option value="Cachorro">Cachorro</option>
+    <option value="Outro">Outro</option>
+  </select>
+  <input type="number" [(ngModel)]="novoAnimal.idade" placeholder="Idade" />
+
+  <select [(ngModel)]="novoAnimal.sexo">
+    <option value="Macho">Macho</option>
+    <option value="Fêmea">Fêmea</option>
+  </select>
+
+  <div style="margin: 10px 0;">
+    <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Foto do Pet:</label>
+    <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+
+    <img *ngIf="novoAnimal.imagemUrl" [src]="novoAnimal.imagemUrl"
+         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-top: 10px; border: 2px solid #eee;">
   </div>
+
+  <button (click)="modoEdicao ? atualizarPetExistente() : salvarPet()">
+    {{ modoEdicao ? 'Salvar Alterações' : 'Cadastrar Animal' }}
+  </button>
+
+  <button *ngIf="modoEdicao" (click)="cancelarEdicao()"
+          style="background-color: #94a3b8; margin-top: 10px;">
+    Cancelar
+  </button>
+</div>
 
   <div *ngIf="petSelecionadoId && !exibirFormNovoPet">
     <h4>📓 Registro Diário</h4>
