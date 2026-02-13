@@ -11,14 +11,23 @@ import { Pet } from '../../models/pet.model';
   styleUrl: './pet-list.component.css'
 })
 export class PetListComponent implements OnInit {
-  lista: Pet[] = [];
+  meusPets: Pet[] = [];
 
   constructor(private petService: PetService) {}
 
   ngOnInit() {
-    // Inscreve-se para receber atualizações automáticas
     this.petService.pets$.subscribe(dados => {
-      this.lista = dados;
+      this.meusPets = dados;
     });
+  }
+
+  apagarPet(id: number) {
+    if (confirm('Deseja excluir este pet e todo o seu diário?')) {
+      this.petService.excluirPet(id);
+    }
+  }
+
+  excluirRegistro(petId: number, eventoId: string) {
+    this.petService.excluirEvento(petId, eventoId);
   }
 }

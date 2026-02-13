@@ -4,7 +4,7 @@ export interface PetEntry {
   titulo: string;
   comentario: string;
   data: Date;
-  proximaData?: Date; // Opcional
+  proximaData?: Date;
 }
 
 export interface Pet {
@@ -12,5 +12,6 @@ export interface Pet {
   nome: string;
   especie: string;
   idade: number;
-  diario: PetEntry[]; // Lista de eventos
+  sexo: 'Macho' | 'Fêmea';
+  diario: PetEntry[];
 }

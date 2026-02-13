@@ -16,6 +16,24 @@ body {
   padding: 40px 20px;
 }
 
+.pet-section {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-delete-pet {
+  background: none;
+  border: none;
+  cursor: pointer;
+  filter: grayscale(1);
+  transition: 0.2s;
+}
+
+.btn-delete-pet:hover { filter: grayscale(0); transform: scale(1.2); }
+
 .container-app {
   max-width: 600px;
   width: 100%;

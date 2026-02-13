@@ -13,35 +13,40 @@ import { Pet, PetEntry } from '../../models/pet.model';
 })
 export class PetFormComponent implements OnInit {
   listaDePets: Pet[] = [];
-  petSelecionadoId: string = ''; 
+  petSelecionadoId: string = '';
+  exibirFormNovoPet: boolean = false;
 
-  // Objeto para a nova entrada do diário
-  novaEntrada: PetEntry = this.limparEntrada();
+  novoAnimal: Pet = this.resetAnimal();
+  novaEntrada: PetEntry = this.resetEntrada();
 
   constructor(private petService: PetService) {}
 
   ngOnInit() {
-    this.listaDePets = this.petService.getPets();
+    this.petService.pets$.subscribe(dados => this.listaDePets = dados);
   }
 
-  limparEntrada(): PetEntry {
-    return {
-      id: Math.random().toString(),
-      categoria: 'Alimentação',
-      titulo: '',
-      comentario: '',
-      data: new Date()
-    };
+  onSelectChange() {
+    this.exibirFormNovoPet = (this.petSelecionadoId === 'novo');
+  }
+
+  salvarPet() {
+    this.novoAnimal.id = Date.now();
+    this.petService.addPet({ ...this.novoAnimal });
+    this.petSelecionadoId = this.novoAnimal.id.toString();
+    this.exibirFormNovoPet = false;
+    this.novoAnimal = this.resetAnimal();
   }
 
   salvarNoDiario() {
-    if (!this.petSelecionadoId) {
-      alert('Por favor, escolha um gatinho primeiro! 🐈');
-      return;
-    }
-
     this.petService.adicionarEvento(Number(this.petSelecionadoId), { ...this.novaEntrada });
-    this.novaEntrada = this.limparEntrada();
-    alert('Acontecimento registrado! ✨');
+    this.novaEntrada = this.resetEntrada();
+  }
+
+  private resetAnimal(): Pet {
+    return { id: 0, nome: '', especie: 'Gato', idade: 0, sexo: 'Macho', diario: [] };
+  }
+
+  private resetEntrada(): PetEntry {
+    return { id: Math.random().toString(), categoria: 'Alimentação', titulo: '', comentario: '', data: new Date() };
   }
 }

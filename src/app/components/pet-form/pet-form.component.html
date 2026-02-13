@@ -1,29 +1,37 @@
 <div class="card-journal">
-  <h3>📓 Nova Entrada no Diário</h3>
-  
   <label>Para qual pet é esta atualização?</label>
-  <select [(ngModel)]="petSelecionadoId">
-    <option value="" disabled selected>Escolha um gato...</option>
-    <option *ngFor="let pet of listaDePets" [value]="pet.id">{{ pet.nome }}</option>
+  <select [(ngModel)]="petSelecionadoId" (change)="onSelectChange()">
+    <option value="" disabled>Escolha um pet...</option>
+    <option *ngFor="let p of listaDePets" [value]="p.id">{{ p.nome }}</option>
+    <option value="novo">➕ ADICIONAR NOVO PET...</option>
   </select>
 
-  <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+  <div *ngIf="exibirFormNovoPet" class="sub-form">
+    <h4>📝 Novo Animal</h4>
+    <input [(ngModel)]="novoAnimal.nome" placeholder="Nome" />
+    <select [(ngModel)]="novoAnimal.especie">
+      <option value="Gato">Gato</option>
+      <option value="Cachorro">Cachorro</option>
+      <option value="Outro">Outro</option>
+    </select>
+    <input type="number" [(ngModel)]="novoAnimal.idade" placeholder="Idade" />
+    <select [(ngModel)]="novoAnimal.sexo">
+      <option value="Macho">Macho</option>
+      <option value="Fêmea">Fêmea</option>
+    </select>
+    <button (click)="salvarPet()">Cadastrar Animal</button>
+  </div>
 
-  <div *ngIf="petSelecionadoId">
-    <label>Categoria:</label>
+  <div *ngIf="petSelecionadoId && !exibirFormNovoPet">
+    <h4>📓 Registro Diário</h4>
     <select [(ngModel)]="novaEntrada.categoria">
       <option value="Medicação">💊 Medicação</option>
       <option value="Banho">🧼 Banho</option>
       <option value="Alimentação">🍽️ Alimentação</option>
       <option value="Customizado">✨ Outro</option>
     </select>
-
-    <input type="text" [(ngModel)]="novaEntrada.titulo" placeholder="Título (ex: Vacina, Cortou a unha)" />
-    <textarea [(ngModel)]="novaEntrada.comentario" placeholder="Conte o que aconteceu..."></textarea>
-    
-    <label>Próxima vez (opcional):</label>
-    <input type="date" [(ngModel)]="novaEntrada.proximaData" />
-
-    <button (click)="salvarNoDiario()">Registrar no Diário</button>
+    <input type="text" [(ngModel)]="novaEntrada.titulo" placeholder="Qual foi a reação?/ O que aconteceu?" />
+    <textarea [(ngModel)]="novaEntrada.comentario" placeholder="Detalhes..."></textarea>
+    <button (click)="salvarNoDiario()">Salvar no Diário</button>
   </div>
 </div>

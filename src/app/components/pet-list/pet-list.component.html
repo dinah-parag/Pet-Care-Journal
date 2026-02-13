@@ -1,3 +1,32 @@
-<div *ngFor="let p of lista" style="border-bottom: 1px solid #eee; padding: 10px;">
-  <strong>{{ p.nome }}</strong> - {{ p.especie }} ({{ p.idade }} anos)
+<div class="timeline-container">
+  <h2>📋 Histórico do Diário</h2>
+
+  <div *ngFor="let pet of meusPets" class="pet-section">
+    <div class="pet-header">
+      <span class="pet-name">
+        <span *ngIf="pet.especie.toLowerCase() === 'gato'">🐈</span>
+        <span *ngIf="pet.especie.toLowerCase() === 'cachorro'">🐕</span>
+        {{ pet.nome }}
+      </span>
+      <div class="pet-meta">
+        <small>{{ pet.sexo }} • {{ pet.idade }} anos</small>
+        <button (click)="apagarPet(pet.id)" class="btn-delete-pet">🗑️</button>
+      </div>
+    </div>
+
+    <div *ngIf="pet.diario.length > 0; else empty">
+      <div *ngFor="let entrada of pet.diario" class="entry-card">
+        <div class="entry-header">
+          <span class="category-tag">{{ entrada.categoria }}</span>
+          <strong>{{ entrada.titulo }}</strong>
+          <button (click)="excluirRegistro(pet.id, entrada.id)" class="btn-mini-del">&times;</button>
+        </div>
+        <p>{{ entrada.comentario }}</p>
+      </div>
+    </div>
+
+    <ng-template #empty>
+      <p>Nenhum registro para este pet.</p>
+    </ng-template>
+  </div>
 </div>
