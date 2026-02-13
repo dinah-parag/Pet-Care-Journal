@@ -3,7 +3,7 @@
   <select [(ngModel)]="petSelecionadoId" (change)="onSelectChange()">
     <option value="" disabled>Escolha um pet...</option>
     <option *ngFor="let p of listaDePets" [value]="p.id">{{ p.nome }}</option>
-    <option value="novo">➕ ADICIONAR NOVO PET...</option>
+    <option value="novo">➕ Adicionar novo pet...</option>
   </select>
 
 <div *ngIf="exibirFormNovoPet" class="sub-form">
@@ -15,7 +15,16 @@
     <option value="Cachorro">Cachorro</option>
     <option value="Outro">Outro</option>
   </select>
-  <input type="number" [(ngModel)]="novoAnimal.idade" placeholder="Idade" />
+  <div class="input-group">
+  <label for="idade">Idade do Animal (anos):</label>
+  <input 
+    id="idade"
+    type="number" 
+    [(ngModel)]="novoAnimal.idade" 
+    placeholder="Ex: 2" 
+    min="0"
+  />
+  </div>
 
   <select [(ngModel)]="novoAnimal.sexo">
     <option value="Macho">Macho</option>

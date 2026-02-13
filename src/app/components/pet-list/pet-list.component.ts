@@ -16,7 +16,6 @@ export class PetListComponent implements OnInit {
   constructor(private petService: PetService) {}
 editarPet(pet: Pet) {
   this.petService.setPetParaEditar(pet);
-  // Opcional: rolar a página para cima para ver o formulário
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
